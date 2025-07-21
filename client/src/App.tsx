@@ -1,10 +1,9 @@
-import React from 'react';
 import { PlateConfigurator } from './components/PlateConfigurator';
-import './App.css';
+import './index.css';
 
 /**
- * Componente principal de la aplicación
- * Configurador de placas de metal para Zuschnittprofi
+ * Main application component
+ * Renders the plate configurator interface
  */
 function App() {
   return (

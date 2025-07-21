@@ -1,7 +1,7 @@
-// Tipos para las dimensiones de la placa
+// Types for plate dimensions
 export type Unit = 'cm' | 'mm';
 
-// Tipos para los colores disponibles
+// Types for available colors
 export type PlateColor = 
   | 'raw-steel' 
   | 'black' 
@@ -10,30 +10,34 @@ export type PlateColor =
   | 'painted-gray' 
   | 'stainless-steel';
 
-// Interfaz para las dimensiones
+// Interface for dimensions
 export interface Dimensions {
   length: number;
   width: number;
   unit: Unit;
 }
 
-// Interfaz para la configuración completa de la placa
+// Interface for complete plate configuration
 export interface PlateConfiguration {
   dimensions: Dimensions;
   color: PlateColor;
   quantity: number;
 }
 
-// Interfaz para el precio simulado
+// Interface for simulated pricing
 export interface PriceEstimate {
   basePrice: number;
   colorMultiplier: number;
   sizeMultiplier: number;
+  quantityMultiplier: number;
+  quantityDiscount: number;
+  quantityDiscountDescription: string;
+  pricePerUnit: number;
   totalPrice: number;
   currency: string;
 }
 
-// Interfaz para las opciones de color
+// Interface for color options
 export interface ColorOption {
   id: PlateColor;
   name: string;
@@ -42,7 +46,7 @@ export interface ColorOption {
   priceMultiplier: number;
 }
 
-// Interfaz para el estado del carrito
+// Interface for cart state
 export interface CartItem {
   id: string;
   configuration: PlateConfiguration;

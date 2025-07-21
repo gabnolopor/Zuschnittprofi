@@ -8,8 +8,8 @@ import { PriceSummary } from './PriceSummary';
 import { Button } from './ui/Button';
 
 /**
- * Componente principal para configurar placas de metal
- * Integra todos los subcomponentes en una interfaz unificada
+ * Main component for configuring metal plates
+ * Orchestrates all sub-components in a unified interface
  */
 export const PlateConfigurator: React.FC = () => {
   const {
@@ -25,13 +25,13 @@ export const PlateConfigurator: React.FC = () => {
   const [activeStep, setActiveStep] = useState<'dimensions' | 'color' | 'quantity' | 'summary'>('dimensions');
   const [showSuccess, setShowSuccess] = useState(false);
 
-  // Manejar agregar al carrito
+  // Handle adding to cart
   const handleAddToCart = () => {
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
   };
 
-  // Navegación entre pasos
+  // Navigation between steps
   const nextStep = () => {
     const steps: Array<'dimensions' | 'color' | 'quantity' | 'summary'> = ['dimensions', 'color', 'quantity', 'summary'];
     const currentIndex = steps.indexOf(activeStep);
@@ -55,7 +55,7 @@ export const PlateConfigurator: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Logo en la esquina superior izquierda */}
+        {/* Logo in top left corner */}
         <div className="absolute top-4 left-4 z-10">
           <img 
             src="/LOGOTEXT.png" 
@@ -67,21 +67,21 @@ export const PlateConfigurator: React.FC = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Configurador de Placas de Metal
+            Metal Plate Configurator
           </h1>
           <p className="text-lg text-gray-600">
-            Diseña tu placa personalizada con dimensiones, color y acabado a medida
+            Design your custom metal plate with dimensions, color, and finish
           </p>
         </div>
 
-        {/* Indicador de progreso */}
+        {/* Progress indicator */}
         <div className="mb-8">
           <div className="flex items-center justify-center space-x-4">
             {[
-              { id: 'dimensions', label: 'Dimensiones', icon: '📏' },
+              { id: 'dimensions', label: 'Dimensions', icon: '📏' },
               { id: 'color', label: 'Color', icon: '🎨' },
-              { id: 'quantity', label: 'Cantidad', icon: '📦' },
-              { id: 'summary', label: 'Resumen', icon: '✅' }
+              { id: 'quantity', label: 'Quantity', icon: '📦' },
+              { id: 'summary', label: 'Summary', icon: '✅' }
             ].map((step, index) => (
               <div key={step.id} className="flex items-center">
                 <button
@@ -105,11 +105,11 @@ export const PlateConfigurator: React.FC = () => {
           </div>
         </div>
 
-        {/* Contenido principal */}
+        {/* Main content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Panel de configuración */}
+          {/* Configuration panel */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Paso: Dimensiones */}
+            {/* Step: Dimensions */}
             {activeStep === 'dimensions' && (
               <div className="card">
                 <DimensionSelector
@@ -120,7 +120,7 @@ export const PlateConfigurator: React.FC = () => {
               </div>
             )}
 
-            {/* Paso: Color */}
+            {/* Step: Color */}
             {activeStep === 'color' && (
               <div className="card">
                 <ColorSelector
@@ -130,7 +130,7 @@ export const PlateConfigurator: React.FC = () => {
               </div>
             )}
 
-            {/* Paso: Cantidad */}
+            {/* Step: Quantity */}
             {activeStep === 'quantity' && (
               <div className="card">
                 <QuantitySelector
@@ -140,31 +140,31 @@ export const PlateConfigurator: React.FC = () => {
               </div>
             )}
 
-            {/* Paso: Resumen - Mostrar vista previa completa */}
+            {/* Step: Summary - Show complete preview */}
             {activeStep === 'summary' && (
               <div className="card">
                 <div className="mb-6">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    Resumen de tu Configuración
+                    Configuration Summary
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Revisa todos los detalles de tu placa personalizada
+                    Review all details of your custom plate
                   </p>
                 </div>
                 
-                {/* Vista previa de la placa en el panel principal */}
+                {/* Plate preview in main panel */}
                 <PlatePreview configuration={configuration} />
               </div>
             )}
 
-            {/* Navegación */}
+            {/* Navigation */}
             <div className="flex justify-between">
               <Button
                 variant="outline"
                 onClick={prevStep}
                 disabled={activeStep === 'dimensions'}
               >
-                Anterior
+                Previous
               </Button>
               
               {activeStep !== 'summary' && (
@@ -172,20 +172,20 @@ export const PlateConfigurator: React.FC = () => {
                   variant="primary"
                   onClick={nextStep}
                 >
-                  Siguiente
+                  Next
                 </Button>
               )}
             </div>
           </div>
 
-          {/* Panel lateral */}
+          {/* Side panel */}
           <div className="space-y-6">
-            {/* Mostrar vista previa en todos los pasos excepto en resumen */}
+            {/* Show preview in all steps except summary */}
             {activeStep !== 'summary' && (
               <PlatePreview configuration={configuration} />
             )}
             
-            {/* Mostrar resumen de precio solo en el paso de resumen */}
+            {/* Show price summary only in summary step */}
             {activeStep === 'summary' && (
               <PriceSummary
                 configuration={configuration}
@@ -197,14 +197,14 @@ export const PlateConfigurator: React.FC = () => {
           </div>
         </div>
 
-        {/* Mensaje de éxito */}
+        {/* Success message */}
         {showSuccess && (
           <div className="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
             <div className="flex items-center space-x-2">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
               </svg>
-              <span>¡Placa agregada al carrito exitosamente!</span>
+              <span>Plate added to cart successfully!</span>
             </div>
           </div>
         )}

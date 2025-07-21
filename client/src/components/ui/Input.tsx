@@ -8,8 +8,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 /**
- * Componente Input reutilizable con label, error y texto de ayuda
- * Utiliza Tailwind CSS para estilos consistentes
+ * Reusable Input component with label, error and help text
+ * Uses Tailwind CSS for consistent styling
  */
 export const Input: React.FC<InputProps> = ({
   label,

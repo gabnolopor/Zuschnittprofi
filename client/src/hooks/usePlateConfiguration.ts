@@ -1,92 +1,73 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { PlateConfiguration, Dimensions, Unit, PlateColor } from '../types';
 import { calculatePrice } from '../utils/pricing';
 
 /**
- * Hook personalizado para manejar la configuración de la placa
- * Proporciona estado y funciones para configurar dimensiones, color y cantidad
+ * Custom hook for managing plate configuration state
+ * Handles dimensions, color, quantity and price calculations
  */
-export function usePlateConfiguration() {
-  // Estado inicial de la configuración
+export const usePlateConfiguration = () => {
+  // Initial configuration state
   const [configuration, setConfiguration] = useState<PlateConfiguration>({
     dimensions: {
       length: 100,
       width: 50,
-      unit: 'cm'
+      unit: 'mm'
     },
     color: 'raw-steel',
     quantity: 1
   });
 
-  // Calcular precio estimado basado en la configuración actual
-  const priceEstimate = useMemo(() => {
-    return calculatePrice(configuration);
-  }, [configuration]);
+  // Calculate price estimate based on current configuration
+  const priceEstimate = calculatePrice(configuration);
 
-  // Función para actualizar las dimensiones
-  const updateDimensions = useCallback((dimensions: Partial<Dimensions>) => {
+  // Update dimensions
+  const updateDimensions = useCallback((newDimensions: Dimensions) => {
     setConfiguration(prev => ({
       ...prev,
-      dimensions: {
-        ...prev.dimensions,
-        ...dimensions
-      }
+      dimensions: newDimensions
     }));
   }, []);
 
-  // Función para cambiar la unidad de medida
-  const changeUnit = useCallback((unit: Unit) => {
+  // Change measurement unit
+  const changeUnit = useCallback((newUnit: Unit) => {
     setConfiguration(prev => {
-      const currentUnit = prev.dimensions.unit;
-      let newLength = prev.dimensions.length;
-      let newWidth = prev.dimensions.width;
-
-      // Convertir valores si es necesario
-      if (currentUnit === 'cm' && unit === 'mm') {
-        newLength = prev.dimensions.length * 10;
-        newWidth = prev.dimensions.width * 10;
-      } else if (currentUnit === 'mm' && unit === 'cm') {
-        newLength = Math.round(prev.dimensions.length / 10);
-        newWidth = Math.round(prev.dimensions.width / 10);
-      }
-
+      // Convert dimensions when changing units
+      const conversionFactor = newUnit === 'mm' ? 10 : 0.1;
       return {
         ...prev,
         dimensions: {
-          ...prev.dimensions,
-          length: newLength,
-          width: newWidth,
-          unit
+          length: Math.round(prev.dimensions.length * conversionFactor * 10) / 10,
+          width: Math.round(prev.dimensions.width * conversionFactor * 10) / 10,
+          unit: newUnit
         }
       };
     });
   }, []);
 
-  // Función para actualizar el color
-  const updateColor = useCallback((color: PlateColor) => {
+  // Update color selection
+  const updateColor = useCallback((newColor: PlateColor) => {
     setConfiguration(prev => ({
       ...prev,
-      color
+      color: newColor
     }));
   }, []);
 
-  // Función para actualizar la cantidad
-  const updateQuantity = useCallback((quantity: number) => {
-    if (quantity > 0) {
-      setConfiguration(prev => ({
-        ...prev,
-        quantity
-      }));
-    }
+  // Update quantity
+  const updateQuantity = useCallback((newQuantity: number) => {
+    setConfiguration(prev => ({
+      ...prev,
+      quantity: Math.max(1, newQuantity)
+    }));
   }, []);
 
-  // Función para resetear la configuración
+  // Reset configuration to defaults
   const resetConfiguration = useCallback(() => {
     setConfiguration({
       dimensions: {
         length: 100,
         width: 50,
-        unit: 'cm'
+        unit: 'mm'
       },
       color: 'raw-steel',
       quantity: 1
@@ -102,4 +83,4 @@ export function usePlateConfiguration() {
     updateQuantity,
     resetConfiguration
   };
-} 
+}; 

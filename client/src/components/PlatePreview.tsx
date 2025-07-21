@@ -7,15 +7,15 @@ interface PlatePreviewProps {
 }
 
 /**
- * Componente para mostrar una vista previa visual de la placa
- * Representa la placa con las dimensiones y color seleccionados
+ * Component to display a visual preview of the plate
+ * Shows the plate with selected dimensions and color
  */
 export const PlatePreview: React.FC<PlatePreviewProps> = ({ configuration }) => {
   const colorOption = getColorOption(configuration.color);
   
-  // Calcular dimensiones relativas para la visualización
+  // Calculate relative dimensions for visualization
   const maxDimension = Math.max(configuration.dimensions.length, configuration.dimensions.width);
-  const scale = Math.min(200 / maxDimension, 1); // Máximo 200px
+  const scale = Math.min(200 / maxDimension, 1); // Maximum 200px
   
   const displayWidth = configuration.dimensions.width * scale;
   const displayHeight = configuration.dimensions.length * scale;
@@ -24,16 +24,16 @@ export const PlatePreview: React.FC<PlatePreviewProps> = ({ configuration }) => 
     <div className="card">
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          Vista Previa
+          Preview
         </h3>
         <p className="text-sm text-gray-600">
-          Visualización de tu placa personalizada
+          Visual representation of your custom plate
         </p>
       </div>
 
-      {/* Contenedor de la vista previa */}
+      {/* Preview container */}
       <div className="relative bg-gray-100 rounded-lg p-6 flex items-center justify-center min-h-[300px]">
-        {/* Placa */}
+        {/* Plate */}
         <div
           className="relative border-2 border-gray-400 shadow-lg"
           style={{
@@ -43,7 +43,7 @@ export const PlatePreview: React.FC<PlatePreviewProps> = ({ configuration }) => 
             opacity: 1
           }}
         >
-          {/* Efecto de brillo */}
+          {/* Shine effect */}
           <div
             className="absolute inset-0 opacity-20"
             style={{
@@ -51,7 +51,7 @@ export const PlatePreview: React.FC<PlatePreviewProps> = ({ configuration }) => 
             }}
           />
           
-          {/* Dimensiones */}
+          {/* Dimensions */}
           <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 text-xs text-gray-600 font-medium">
             {configuration.dimensions.length} {configuration.dimensions.unit}
           </div>
@@ -60,7 +60,7 @@ export const PlatePreview: React.FC<PlatePreviewProps> = ({ configuration }) => 
           </div>
         </div>
 
-        {/* Información del color */}
+        {/* Color information */}
         <div className="absolute bottom-4 left-4 bg-white rounded-lg px-3 py-2 shadow-md">
           <div className="flex items-center space-x-2">
             <div
@@ -73,25 +73,25 @@ export const PlatePreview: React.FC<PlatePreviewProps> = ({ configuration }) => 
           </div>
         </div>
 
-        {/* Escala */}
+        {/* Scale information */}
         <div className="absolute bottom-4 right-4 bg-white rounded-lg px-3 py-2 shadow-md">
           <div className="text-xs text-gray-600">
-            <div className="font-medium">Escala: 1:{Math.round(1/scale)}</div>
-            <div>Área: {(configuration.dimensions.length * configuration.dimensions.width).toFixed(0)} {configuration.dimensions.unit}²</div>
+            <div className="font-medium">Scale: 1:{Math.round(1/scale)}</div>
+            <div>Area: {(configuration.dimensions.length * configuration.dimensions.width).toFixed(0)} {configuration.dimensions.unit}²</div>
           </div>
         </div>
       </div>
 
-      {/* Información adicional */}
+      {/* Additional information */}
       <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
         <div className="bg-gray-50 rounded-lg p-3">
-          <div className="font-medium text-gray-900">Dimensiones</div>
+          <div className="font-medium text-gray-900">Dimensions</div>
           <div className="text-gray-600">
             {configuration.dimensions.length} × {configuration.dimensions.width} {configuration.dimensions.unit}
           </div>
         </div>
         <div className="bg-gray-50 rounded-lg p-3">
-          <div className="font-medium text-gray-900">Acabado</div>
+          <div className="font-medium text-gray-900">Finish</div>
           <div className="text-gray-600">{colorOption?.description}</div>
         </div>
       </div>

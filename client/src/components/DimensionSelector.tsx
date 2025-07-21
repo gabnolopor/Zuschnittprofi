@@ -1,159 +1,184 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dimensions, Unit } from '../types';
-import { Input } from './ui/Input';
 import { Button } from './ui/Button';
 
 interface DimensionSelectorProps {
   dimensions: Dimensions;
-  onDimensionsChange: (dimensions: Partial<Dimensions>) => void;
+  onDimensionsChange: (dimensions: Dimensions) => void;
   onUnitChange: (unit: Unit) => void;
 }
 
 /**
- * Componente para configurar las dimensiones de la placa
- * Incluye validación y conversión automática de unidades
+ * Component for selecting plate dimensions
+ * Allows users to set length, width and choose between cm/mm units
  */
 export const DimensionSelector: React.FC<DimensionSelectorProps> = ({
   dimensions,
   onDimensionsChange,
   onUnitChange
 }) => {
-  const [errors, setErrors] = useState<{ length?: string; width?: string }>({});
-
-  // Validar dimensiones
-  const validateDimensions = (length: number, width: number): boolean => {
-    const newErrors: { length?: string; width?: string } = {};
-
-    if (length <= 0) {
-      newErrors.length = 'La longitud debe ser mayor a 0';
-    } else if (length > 10000) {
-      newErrors.length = 'La longitud no puede exceder 10,000';
-    }
-
-    if (width <= 0) {
-      newErrors.width = 'El ancho debe ser mayor a 0';
-    } else if (width > 10000) {
-      newErrors.width = 'El ancho no puede exceder 10,000';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  // Manejar cambios en las dimensiones
+  // Handle dimension changes
   const handleDimensionChange = (field: 'length' | 'width', value: string) => {
-    const numValue = parseFloat(value) || 0;
+    // Handle empty value - don't convert to 0
+    if (value === '') {
+      onDimensionsChange({
+        ...dimensions,
+        [field]: 0
+      });
+      return;
+    }
     
-    if (validateDimensions(
-      field === 'length' ? numValue : dimensions.length,
-      field === 'width' ? numValue : dimensions.width
-    )) {
-      onDimensionsChange({ [field]: numValue });
+    const numValue = parseFloat(value);
+    // Only update if it's a valid number
+    if (!isNaN(numValue) && numValue >= 0) {
+      onDimensionsChange({
+        ...dimensions,
+        [field]: numValue
+      });
     }
   };
 
-  // Calcular área para mostrar
-  const area = dimensions.length * dimensions.width;
-  const areaInCm2 = dimensions.unit === 'mm' ? area / 100 : area;
+  // Handle unit changes
+  const handleUnitChange = (newUnit: Unit) => {
+    if (newUnit === dimensions.unit) return;
+    
+    // Convert dimensions when changing units
+    const conversionFactor = newUnit === 'mm' ? 10 : 0.1;
+    onDimensionsChange({
+      length: Math.round(dimensions.length * conversionFactor * 10) / 10,
+      width: Math.round(dimensions.width * conversionFactor * 10) / 10,
+      unit: newUnit
+    });
+    onUnitChange(newUnit);
+  };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          Dimensiones de la Placa
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          Plate Dimensions
         </h3>
-        <p className="text-sm text-gray-600 mb-4">
-          Define el tamaño de tu placa de metal
+        <p className="text-sm text-gray-600">
+          Set the length and width of your custom metal plate
         </p>
       </div>
 
-      {/* Selector de unidad */}
-      <div className="flex items-center space-x-4">
-        <span className="text-sm font-medium text-gray-700">Unidad:</span>
-        <div className="flex bg-gray-100 rounded-lg p-1">
-          {(['cm', 'mm'] as Unit[]).map((unit) => (
-            <button
-              key={unit}
-              onClick={() => onUnitChange(unit)}
-              className={`
-                px-3 py-1 text-sm font-medium rounded-md transition-colors
-                ${dimensions.unit === unit
-                  ? 'bg-white text-primary-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
-                }
-              `}
-            >
-              {unit.toUpperCase()}
-            </button>
-          ))}
+      {/* Unit selection */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Measurement Unit
+        </label>
+        <div className="flex space-x-3">
+          <Button
+            variant={dimensions.unit === 'cm' ? 'primary' : 'outline'}
+            size="md"
+            onClick={() => handleUnitChange('cm')}
+          >
+            Centimeters (cm)
+          </Button>
+          <Button
+            variant={dimensions.unit === 'mm' ? 'primary' : 'outline'}
+            size="md"
+            onClick={() => handleUnitChange('mm')}
+          >
+            Millimeters (mm)
+          </Button>
         </div>
       </div>
 
-      {/* Campos de dimensiones */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input
-          label="Longitud"
-          type="number"
-          min="0.1"
-          max="10000"
-          step="0.1"
-          value={dimensions.length}
-          onChange={(e) => handleDimensionChange('length', e.target.value)}
-          error={errors.length}
-          helperText={`Mín: 0.1, Máx: 10,000 ${dimensions.unit}`}
-        />
+      {/* Dimension inputs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Length input */}
+        <div>
+          <label htmlFor="length" className="block text-sm font-medium text-gray-700 mb-2">
+            Length
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              id="length"
+              value={dimensions.length || ''}
+              onChange={(e) => handleDimensionChange('length', e.target.value)}
+              onKeyPress={(e) => {
+                // Allow only numbers, decimal point, and backspace
+                if (!/[0-9.]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+                  e.preventDefault();
+                }
+              }}
+              className="input-field"
+              placeholder="Enter length"
+            />
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+              <span className="text-gray-500 text-sm">{dimensions.unit}</span>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Maximum: 1000 {dimensions.unit}
+          </p>
+        </div>
 
-        <Input
-          label="Ancho"
-          type="number"
-          min="0.1"
-          max="10000"
-          step="0.1"
-          value={dimensions.width}
-          onChange={(e) => handleDimensionChange('width', e.target.value)}
-          error={errors.width}
-          helperText={`Mín: 0.1, Máx: 10,000 ${dimensions.unit}`}
-        />
+        {/* Width input */}
+        <div>
+          <label htmlFor="width" className="block text-sm font-medium text-gray-700 mb-2">
+            Width
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              id="width"
+              value={dimensions.width || ''}
+              onChange={(e) => handleDimensionChange('width', e.target.value)}
+              onKeyPress={(e) => {
+                // Allow only numbers, decimal point, and backspace
+                if (!/[0-9.]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete') {
+                  e.preventDefault();
+                }
+              }}
+              className="input-field"
+              placeholder="Enter width"
+            />
+            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+              <span className="text-gray-500 text-sm">{dimensions.unit}</span>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Maximum: 1000 {dimensions.unit}
+          </p>
+        </div>
       </div>
 
-      {/* Información del área */}
+      {/* Area calculation */}
       <div className="bg-gray-50 rounded-lg p-4">
         <div className="flex justify-between items-center">
-          <span className="text-sm font-medium text-gray-700">Área total:</span>
+          <span className="text-sm font-medium text-gray-700">Total Area:</span>
           <span className="text-lg font-semibold text-gray-900">
-            {areaInCm2.toFixed(2)} cm²
+            {(dimensions.length * dimensions.width).toFixed(2)} {dimensions.unit}²
           </span>
         </div>
-        <div className="mt-2 text-xs text-gray-500">
-          {dimensions.unit === 'mm' && (
-            <span>Convertido de {area.toFixed(0)} mm²</span>
-          )}
+        <div className="flex justify-between items-center mt-1">
+          <span className="text-sm text-gray-600">Area in cm²:</span>
+          <span className="text-sm font-medium text-gray-700">
+            {dimensions.unit === 'mm' 
+              ? ((dimensions.length * dimensions.width) / 100).toFixed(2)
+              : (dimensions.length * dimensions.width).toFixed(2)
+            } cm²
+          </span>
         </div>
       </div>
 
-      {/* Botones de acción rápida */}
-      <div className="flex flex-wrap gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onDimensionsChange({ length: 100, width: 50 })}
-        >
-          Estándar (100×50)
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onDimensionsChange({ length: 200, width: 100 })}
-        >
-          Grande (200×100)
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onDimensionsChange({ length: 50, width: 25 })}
-        >
-          Pequeña (50×25)
-        </Button>
+      {/* Help text */}
+      <div className="bg-blue-50 rounded-lg p-3">
+        <div className="flex items-start space-x-2">
+          <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+          </svg>
+          <div className="text-sm text-blue-800">
+            <p className="font-medium">Precision matters</p>
+            <p className="text-blue-700">
+              Enter exact dimensions for accurate pricing. You can switch between cm and mm at any time.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
