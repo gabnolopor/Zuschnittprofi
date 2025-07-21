@@ -1,0 +1,31 @@
+{
+  "name": "zuschnittprofi-plate-configurator",
+  "version": "1.0.0",
+  "description": "Configurador de placas de metal personalizadas para Zuschnittprofi",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "test": "cd client && npm test",
+    "install-deps": "cd client && npm install",
+    "setup": "npm run install-deps"
+  },
+  "keywords": [
+    "react",
+    "typescript",
+    "aws-amplify",
+    "metal-plates",
+    "configurator",
+    "zuschnittprofi"
+  ],
+  "author": "Candidato para Zuschnittprofi",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/leavetterling/zuschnittprofi-plate-configurator"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+} 
