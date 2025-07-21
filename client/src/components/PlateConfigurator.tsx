@@ -70,7 +70,7 @@ export const PlateConfigurator: React.FC = () => {
             Metal Plate Configurator
           </h1>
           <p className="text-lg text-gray-600">
-            Design your custom metal plate with dimensions, color, and finish
+            Design your custom metal plate with dimensions, color and finish
           </p>
         </div>
 
