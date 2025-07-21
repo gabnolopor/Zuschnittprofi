@@ -1,5 +1,3 @@
-import { Amplify } from 'aws-amplify';
-
 /**
  * Configuración básica de AWS Amplify para la aplicación
  * Esta configuración se debe actualizar con los valores reales de tu proyecto AWS
