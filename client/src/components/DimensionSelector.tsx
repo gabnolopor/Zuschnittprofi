@@ -149,17 +149,17 @@ export const DimensionSelector: React.FC<DimensionSelectorProps> = ({
         </div>
       </div>
 
-      {/* Area calculation - Responsive layout */}
+      {/* Area calculation - Responsive layout with better desktop spacing */}
       <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-1 sm:space-y-0">
-          <span className="text-sm font-medium text-gray-700">Total Area:</span>
-          <span className="text-base sm:text-lg font-semibold text-gray-900">
+        <div className="label-value-mobile lg:label-value-desktop">
+          <span className="label">Total Area:</span>
+          <span className="value break-all">
             {(dimensions.length * dimensions.width).toFixed(2)} {dimensions.unit}²
           </span>
         </div>
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-1">
-          <span className="text-sm text-gray-600">Area in cm²:</span>
-          <span className="text-sm font-medium text-gray-700">
+        <div className="label-value-mobile lg:label-value-desktop mt-1">
+          <span className="label">Area in cm²:</span>
+          <span className="value break-all">
             {dimensions.unit === 'mm' 
               ? ((dimensions.length * dimensions.width) / 100).toFixed(2)
               : (dimensions.length * dimensions.width).toFixed(2)

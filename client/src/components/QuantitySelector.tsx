@@ -83,8 +83,8 @@ export const QuantitySelector: React.FC<QuantitySelectorProps> = ({
           </button>
         </div>
 
-        {/* Quick quantity buttons - Responsive grid */}
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
+        {/* Quick quantity buttons - Responsive grid with better desktop layout */}
+        <div className="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-6 gap-2 sm:gap-3">
           {[1, 5, 10, 25, 50, 100].map((qty) => (
             <button
               key={qty}

@@ -25,6 +25,9 @@ export const PriceSummary: React.FC<PriceSummaryProps> = ({
     ? (configuration.dimensions.length * configuration.dimensions.width) / 100
     : configuration.dimensions.length * configuration.dimensions.width;
 
+  // Calculate base price per cm² (€0.15 per cm²)
+  const basePricePerCm2 = 0.15;
+
   return (
     <div className="card">
       <div className="mb-4 sm:mb-6">
@@ -69,7 +72,11 @@ export const PriceSummary: React.FC<PriceSummaryProps> = ({
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Base price per cm²:</span>
-              <span>€{priceEstimate.basePrice.toFixed(2)}</span>
+              <span>€{basePricePerCm2.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Total area:</span>
+              <span>{areaInCm2.toFixed(2)} cm²</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Color multiplier:</span>
@@ -87,7 +94,7 @@ export const PriceSummary: React.FC<PriceSummaryProps> = ({
               <>
                 <div className="flex justify-between text-green-600">
                   <span>Quantity discount ({priceEstimate.quantityDiscountDescription}):</span>
-                  <span>-{formatPrice(priceEstimate.quantityDiscount)}</span>
+                  <span>-{((priceEstimate.quantityDiscount * priceEstimate.pricePerUnit * configuration.quantity) * 100).toFixed(0)}%</span>
                 </div>
                 <div className="border-t border-gray-200 pt-2">
                   <div className="flex justify-between">

@@ -43,6 +43,40 @@
   .m-responsive-sm { @apply m-2 sm:m-3; }
   .m-responsive-md { @apply m-3 sm:m-4; }
   .m-responsive-lg { @apply m-4 sm:m-6; }
+  
+  /* Text overflow utilities */
+  .text-overflow-safe { 
+    @apply overflow-hidden text-ellipsis whitespace-nowrap; 
+  }
+  
+  .text-wrap-safe { 
+    @apply break-words overflow-wrap-anywhere; 
+  }
+  
+  .text-break-all { 
+    @apply break-all; 
+  }
+  
+  .text-break-words { 
+    @apply break-words; 
+  }
+  
+  /* Label-value spacing utilities */
+  .label-value-mobile { 
+    @apply flex justify-between items-center; 
+  }
+  
+  .label-value-desktop { 
+    @apply flex items-center space-x-2; 
+  }
+  
+  .label-value-desktop .label { 
+    @apply text-gray-600; 
+  }
+  
+  .label-value-desktop .value { 
+    @apply font-medium; 
+  }
 }
 
 /* Global styles */
@@ -119,4 +153,34 @@ html {
     position: sticky;
     top: 1rem;
   }
+  
+  /* Desktop label-value spacing */
+  .desktop-label-value {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .desktop-label-value .label {
+    color: #6b7280;
+    margin-right: 0.25rem;
+  }
+  
+  .desktop-label-value .value {
+    font-weight: 500;
+  }
+}
+
+/* Text overflow handling for long numbers */
+.long-number {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+/* Prevent text overflow in flex containers */
+.flex-text-safe {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
