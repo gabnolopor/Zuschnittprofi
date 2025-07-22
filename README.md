@@ -79,14 +79,6 @@ Visual preview of the configured metal plate.
 ### PriceSummary
 Price breakdown and purchase options.
 
-## 🔧 Configuration
-
-### Environment Variables
-```bash
-REACT_APP_API_URL=https://api.example.com
-REACT_APP_REGION=us-east-1
-```
-
 ### AWS Amplify
 - **Hosting**: S3 + CloudFront
 - **CI/CD**: Automatic with GitHub
@@ -154,30 +146,13 @@ frontend:
       - '**/*'
 ```
 
-## 🎯 Future Enhancements
-
-- [ ] Real backend integration
-- [ ] Authentication system
-- [ ] Persistent shopping cart
-- [ ] Configuration history
-- [ ] Export configurations
-- [ ] Payment system integration
-
-## 🤝 Contributing
-
-1. Fork the project
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is part of a technical assessment for Zuschnittprofi.
 
 ## 📞 Contact
 
-- **Email**: lea@zuschnittprofi.de
+- **Email**: gabinoelp20@hotmail.com
 - **Company**: Zuschnittprofi
 - **Project**: Metal Plate Configurator
 
